@@ -1,3 +1,4 @@
+const mysql = require('mysql2');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -12,7 +13,23 @@ app.get('/', (req, res) => {
     });
 });
 
-// Default response for any other request (Not Found)
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        // You MYSQL username,
+        user: 'root',
+        // Your MY SQL password
+        password: '123',
+        database: 'election'
+    },
+    console.log('Connected to the election database.')
+);
+
+db.query('SELECT * FROM candidates', (err, rows) => {
+    console.log(rows);
+});
+
+// Default response for any other request (Not Found, catchall route)
 app.use((req, res) => {
     res.status(404).end();
 });
